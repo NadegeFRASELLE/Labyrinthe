@@ -4,6 +4,8 @@ public class Labyrinthe {
     final int longueur = 5;
     final int hauteur = 4;
     //Pour le moment on va travailler avec un tableau de 5 par 4 cases
+    Case entree;
+    Case sortie;
     Case[][] labyrinthe = new Case[longueur][hauteur];
     boolean[][] mursVerticaux = new boolean[longueur + 1][hauteur];
     boolean[][] mursHorizontaux = new boolean[longueur][hauteur + 1];
@@ -13,8 +15,32 @@ public class Labyrinthe {
         setupCases();
         setupMurs();
     }
+    private void setupEntreeSortie(){
+        //on veut mettre en place une entree ou une sortie
+        //a modifier pour écraser les coordonnées de l'entrée et de la sortie
+        Random r = new Random();
 
-    private void selectionCaseHasard(){
+        int choix = r.nextInt(1,3);
+        if(choix == 1){
+            choix = r.nextInt(1,3);
+            if (choix == 1) {
+               mursVerticaux[0][r.nextInt(mursVerticaux[0].length)] = false;
+            }
+            if (choix == 2) {
+                mursVerticaux[mursVerticaux.length-1][r.nextInt(mursVerticaux[0].length)] = false;
+            }
+        }
+        if(choix == 2){
+            choix = r.nextInt(1,3);
+            if (choix == 1) {
+                mursHorizontaux[r.nextInt(mursHorizontaux.length)][0] = false;
+            }
+            if (choix == 2) {
+                mursHorizontaux[r.nextInt(mursHorizontaux[0].length)][mursHorizontaux[0].length-1] = false;
+            }
+        }
+    }
+    private int[] selectionCaseHasard(){
         Random r = new Random();
         int[] idTempo = new int[2];
 
@@ -29,7 +55,6 @@ public class Labyrinthe {
                 mursVerticaux[idTempo[0]][idTempo[1]] = false;
                 labyrinthe[idTempo[0]][idTempo[1]].idCase = labyrinthe[idTempo[0] - 1][idTempo[1]].idCase;
             }
-
         }
         if(choix == 2){
             //meme traitement mais pour les murs horizontaux
@@ -40,6 +65,7 @@ public class Labyrinthe {
                 labyrinthe[idTempo[0]][idTempo[1]].idCase = labyrinthe[idTempo[0]][idTempo[1] - 1].idCase;
             }
         }
+        return idTempo;
     }
     private void setupCases(){
         int idCase = 0;
