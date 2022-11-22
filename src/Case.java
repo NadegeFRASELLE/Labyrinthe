@@ -9,4 +9,10 @@ public class Case {
         this.coordonneeX = coordonneeX;
         this.coordonneeY = coordonneeY;
     }
+
+    public Case() { //Constructeur vide créé pour initialiser les entrees et sorties, pas utilisé ailleurs
+        this.idCase = -1;
+        this.coordonneeX = -1;
+        this.coordonneeY = -1;
+    }
 }
