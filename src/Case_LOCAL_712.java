@@ -16,10 +16,4 @@ public class Case {
         this.coordonneeY = -1;
     }
 
-	@Override
-	public String toString() {
-		return "Case [idCase=" + idCase + ", coordonneeX=" + coordonneeX + ", coordonneeY=" + coordonneeY + "]";
-	}
-    
-    
 }
