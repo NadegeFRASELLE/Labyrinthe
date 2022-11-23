@@ -6,6 +6,7 @@ public class Labyrinthe {
     //Pour le moment on va travailler avec un tableau de 5 par 4 cases
     Case entree = new Case();
     Case sortie = new Case();
+    //on va stocker l'emplacement de l'entrée et de la sortie
     Case[][] labyrinthe = new Case[longueur][hauteur];
     boolean[][] mursVerticaux = new boolean[longueur + 1][hauteur];
     boolean[][] mursHorizontaux = new boolean[longueur][hauteur + 1];
@@ -16,9 +17,9 @@ public class Labyrinthe {
         setupMurs();
         setupEntreeSortie(entree);
         setupEntreeSortie(sortie);
-        //écrire une méthode booléenne qui vérifie si toutes les cases on le meme ID
-        //écrire les ToString pour pouvoir afficher les cases et le labyrinthe (pour tester l'algo)
-        //finir le setup
+        while(!checkIDCases(labyrinthe)){
+            selectionCaseHasard();
+        }
         //écrire l'algo de résolution du labyrinthe puis en faire une méthode
 
     }
@@ -56,11 +57,16 @@ public class Labyrinthe {
                 mursHorizontaux[idTempo[0]][idTempo[1]] = false;
             }
             //réelle intialisation de la Case entrée ou sortie
-        eS.idCase = this.labyrinthe[idTempo[0]][idTempo[1]].idCase;
+        if(idTempo[0]==0){
+            eS.idCase = this.labyrinthe[idTempo[0]][idTempo[1]].idCase;
+        } else {
+            eS.idCase = this.labyrinthe[idTempo[0]-1][idTempo[1]].idCase;
+        }
+
         eS.coordonneeX = idTempo[0];
         eS.coordonneeY = idTempo[1];
     }
-    private int[] selectionCaseHasard(){
+    private void selectionCaseHasard(){
         Random r = new Random();
         int[] idTempo = new int[2];
 
@@ -85,7 +91,18 @@ public class Labyrinthe {
                 labyrinthe[idTempo[0]][idTempo[1]].idCase = labyrinthe[idTempo[0]][idTempo[1] - 1].idCase;
             }
         }
-        return idTempo;
+    }
+    private boolean checkIDCases(Case[][] labyrinthe){
+        //méthode qui renvoie true si les ID de toutes les cases sont identiques (ce qui veut dire que toutes les cases
+        //ont été fusionnées
+        for(int i = 0; i < labyrinthe.length - 1; i++){
+            for (int j = 0 ; j < labyrinthe[0].length; j++){
+                if(labyrinthe[i][j].idCase != labyrinthe[i][j].idCase){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     private void setupCases(){
         int idCase = 0;
