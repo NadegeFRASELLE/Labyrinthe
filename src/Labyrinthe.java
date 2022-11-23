@@ -26,11 +26,12 @@ public class Labyrinthe {
         //on veut mettre en place une entree ou une sortie
         //a modifier pour écraser les coordonnées de l'entrée et de la sortie
         Random r = new Random();
+       
         int[] idTempo = new int[2]; //variable pour stocker les coordonnées de la case à modifier
         int choix = r.nextInt(1,3);
        //on utilise un objet Random pour déjà  choisir si l'entree/sortie sera sur un mur vertical ou horizontal
             if (choix == 1) {
-                choix = r.nextInt(1, 3);
+                choix = r.nextInt(1,3);
                 //ensuite on veut savoir si l'eS sera sur un mur a droite ou a gauche du tableau
                 if (choix == 1) {
                     idTempo[0] = 0;
