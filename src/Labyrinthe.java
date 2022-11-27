@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Labyrinthe {
@@ -15,15 +16,20 @@ public class Labyrinthe {
     public Labyrinthe() {
         setupCases();
         setupMurs();
-        setupEntreeSortie(entree);
-        setupEntreeSortie(sortie);
+        entree.idCase = 0;
+        entree.coordonneeX =0;
+        entree.coordonneeY=0;
+        sortie.idCase = labyrinthe[longueur-1][hauteur-1].idCase;
+        sortie.coordonneeX=longueur-1;
+        sortie.coordonneeY=hauteur-1;
+
         while(!checkIDCases(labyrinthe)){
             selectionCaseHasard();
         }
         //écrire l'algo de résolution du labyrinthe puis en faire une méthode
 
     }
-    private void setupEntreeSortie(Case eS){
+    /*private void setupEntreeSortie(Case eS){
         //on veut mettre en place une entree ou une sortie
         //a modifier pour écraser les coordonnées de l'entrée et de la sortie
         Random r = new Random();
@@ -66,7 +72,7 @@ public class Labyrinthe {
 
         eS.coordonneeX = idTempo[0];
         eS.coordonneeY = idTempo[1];
-    }
+    }*/
     private void selectionCaseHasard(){
         Random r = new Random();
         int[] idTempo = new int[2];
@@ -78,9 +84,10 @@ public class Labyrinthe {
             idTempo[1] = r.nextInt(1,mursVerticaux[0].length-1);
             // si les id des cases sont différents, alors on les fusionne (retirer le mur + elles ont le meme id)
             //on a choisi un mur au hasard et on regarde les cases de part et d'autre de ce mur
-            if(labyrinthe[idTempo[0] - 1][idTempo[1]].idCase != labyrinthe[idTempo[0] - 1][idTempo[1]].idCase) {
+            if(labyrinthe[idTempo[0]][idTempo[1]].idCase != labyrinthe[idTempo[0] - 1][idTempo[1]].idCase) {
                 mursVerticaux[idTempo[0]][idTempo[1]] = false;
-                labyrinthe[idTempo[0]][idTempo[1]].idCase = labyrinthe[idTempo[0] - 1][idTempo[1]].idCase;
+                remplacerID(labyrinthe[idTempo[0] - 1][idTempo[1]].idCase,labyrinthe[idTempo[0]][idTempo[1]].idCase);
+
             }
         }
         if(choix == 2){
@@ -89,21 +96,34 @@ public class Labyrinthe {
             idTempo[1] = r.nextInt(1, mursHorizontaux[0].length-1);
             if(labyrinthe[idTempo[0]][idTempo[1] - 1].idCase != labyrinthe[idTempo[0]][idTempo[1]].idCase) {
                 mursHorizontaux[idTempo[0]][idTempo[1]] = false;
-                labyrinthe[idTempo[0]][idTempo[1]].idCase = labyrinthe[idTempo[0]][idTempo[1] - 1].idCase;
+                remplacerID(labyrinthe[idTempo[0]][idTempo[1] - 1].idCase,labyrinthe[idTempo[0]][idTempo[1]].idCase);
+
+                    //labyrinthe[idTempo[0]][idTempo[1]].idCase = labyrinthe[idTempo[0]][idTempo[1] - 1].idCase;
             }
         }
+
     }
+
     private boolean checkIDCases(Case[][] labyrinthe){
         //méthode qui renvoie true si les ID de toutes les cases sont identiques (ce qui veut dire que toutes les cases
         //ont été fusionnées
         for(int i = 0; i < labyrinthe.length - 1; i++){
             for (int j = 0 ; j < labyrinthe[0].length; j++){
-                if(labyrinthe[i][j].idCase != labyrinthe[i][j].idCase){
+                if(labyrinthe[i][j].idCase != labyrinthe[i+1][j].idCase){
                     return false;
                 }
             }
         }
         return true;
+    }
+    private void remplacerID(int idRemplacement, int idEffacer){
+        for(int i = 0; i < labyrinthe.length; i++){
+            for(int j=0; j< labyrinthe[0].length; j++){
+                if(labyrinthe[i][j].idCase == idEffacer){
+                    labyrinthe[i][j].idCase = idRemplacement;
+                }
+            }
+        }
     }
     private void setupCases(){
         int idCase = 0;
