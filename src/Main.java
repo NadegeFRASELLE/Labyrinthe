@@ -1,10 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -56,15 +54,15 @@ public class Main {
     
     //methode du tp convolution 
 	private static BufferedImage transformArrayToImage(Labyrinthe labyrinthe) {
-		BufferedImage outputImage = new BufferedImage(labyrinthe.longueur * 3 + 1,
-				labyrinthe.hauteur * 3 + 1, BufferedImage.TYPE_INT_RGB);
+		BufferedImage outputImage = new BufferedImage(labyrinthe.longueur * 5 + 1,
+				labyrinthe.hauteur * 5 + 1, BufferedImage.TYPE_INT_RGB);
 
 		for (int i = 0; i < labyrinthe.mursHorizontaux.length; i++) {
 			for (int j = 0; j < labyrinthe.mursHorizontaux[i].length; j++) {
 				Color color = Color.WHITE;
-				if (labyrinthe.mursHorizontaux[i][j]) {
-					for(int k =0; k<3; k++) {
-						outputImage.setRGB(i*3+k, j*3, color.getRGB());
+				if (labyrinthe.mursHorizontaux[i][j].estPresent) {
+					for(int k =0; k<5; k++) {
+						outputImage.setRGB(i*5+k, j*5, color.getRGB());
 					}
 				}
 			}
@@ -73,9 +71,9 @@ public class Main {
 		for (int i = 0; i < labyrinthe.mursVerticaux.length; i++) {
 			for (int j = 0; j < labyrinthe.mursVerticaux[i].length; j++) {
 				Color color = Color.WHITE;
-				if (labyrinthe.mursVerticaux[i][j]) {
-					for(int k =0; k<3; k++) {
-						outputImage.setRGB(i*3, j*3+k, color.getRGB());
+				if (labyrinthe.mursVerticaux[i][j].estPresent) {
+					for(int k =0; k<5; k++) {
+						outputImage.setRGB(i*5, j*5+k, color.getRGB());
 					}
 				}
 

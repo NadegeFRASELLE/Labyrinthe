@@ -8,9 +8,11 @@ public class Labyrinthe {
     Case entree = new Case();
     Case sortie = new Case();
     //on va stocker l'emplacement de l'entrée et de la sortie
+    ArrayList<Mur> mursVertAVisiter = new ArrayList<>();
+    ArrayList<Mur> mursHoriAVisiter = new ArrayList<>();
     Case[][] labyrinthe = new Case[longueur][hauteur];
-    boolean[][] mursVerticaux = new boolean[longueur + 1][hauteur];
-    boolean[][] mursHorizontaux = new boolean[longueur][hauteur + 1];
+    Mur[][] mursVerticaux = new Mur[longueur + 1][hauteur];
+    Mur[][] mursHorizontaux = new Mur[longueur][hauteur + 1];
     //On a un tableau pour stocker les cases, une "matrice" de murs verticaux et une "matrice" de murs horizontaux
 
     public Labyrinthe() {
@@ -19,12 +21,14 @@ public class Labyrinthe {
         entree.idCase = 0;
         entree.coordonneeX =0;
         entree.coordonneeY=0;
+        mursVerticaux[0][0].estPresent = false;
+        mursVerticaux[mursVerticaux.length-1][mursVerticaux[0].length - 1].estPresent = false;
         sortie.idCase = labyrinthe[longueur-1][hauteur-1].idCase;
         sortie.coordonneeX=longueur-1;
         sortie.coordonneeY=hauteur-1;
 
         while(!checkIDCases(labyrinthe)){
-            selectionCaseHasard();
+            selectionCase();
         }
         //écrire l'algo de résolution du labyrinthe puis en faire une méthode
 
@@ -73,37 +77,46 @@ public class Labyrinthe {
         eS.coordonneeX = idTempo[0];
         eS.coordonneeY = idTempo[1];
     }*/
-    private void selectionCaseHasard(){
+    private void selectionCase(){
         Random r = new Random();
-        int[] idTempo = new int[2];
-
+        Mur mur;
         int choix = r.nextInt(1,3);
-        //choix d'un tableaux de murs au hasard puis ensuite choix des coordonnées du mur au hasard (bords exclus)
-        if(choix == 1){
-            idTempo[0] = r.nextInt(1, mursVerticaux.length-1);
-            idTempo[1] = r.nextInt(1,mursVerticaux[0].length-1);
-            // si les id des cases sont différents, alors on les fusionne (retirer le mur + elles ont le meme id)
-            //on a choisi un mur au hasard et on regarde les cases de part et d'autre de ce mur
-            if(labyrinthe[idTempo[0]][idTempo[1]].idCase != labyrinthe[idTempo[0] - 1][idTempo[1]].idCase) {
-                mursVerticaux[idTempo[0]][idTempo[1]] = false;
-                remplacerID(labyrinthe[idTempo[0] - 1][idTempo[1]].idCase,labyrinthe[idTempo[0]][idTempo[1]].idCase);
 
+        //choix d'un tableaux de murs au hasard puis ensuite choix des coordonnées du mur au hasard (bords exclus)
+
+        if(choix == 1){
+            mur = selectionMurHasard('v');
+            if(labyrinthe[mur.coordX][mur.coordY].idCase != labyrinthe[mur.coordX-1][mur.coordY].idCase){
+                mursVerticaux[mur.coordX][mur.coordY].estPresent = false;
+                remplacerID(labyrinthe[mur.coordX-1][mur.coordY].idCase,labyrinthe[mur.coordX][mur.coordY].idCase);
             }
         }
         if(choix == 2){
-            //meme traitement mais pour les murs horizontaux
-            idTempo[0] = r.nextInt(1,mursHorizontaux.length-1);
-            idTempo[1] = r.nextInt(1, mursHorizontaux[0].length-1);
-            if(labyrinthe[idTempo[0]][idTempo[1] - 1].idCase != labyrinthe[idTempo[0]][idTempo[1]].idCase) {
-                mursHorizontaux[idTempo[0]][idTempo[1]] = false;
-                remplacerID(labyrinthe[idTempo[0]][idTempo[1] - 1].idCase,labyrinthe[idTempo[0]][idTempo[1]].idCase);
-
-                    //labyrinthe[idTempo[0]][idTempo[1]].idCase = labyrinthe[idTempo[0]][idTempo[1] - 1].idCase;
+            mur = selectionMurHasard('h');
+            if(labyrinthe[mur.coordX][mur.coordY].idCase != labyrinthe[mur.coordX][mur.coordY-1].idCase){
+                mursHorizontaux[mur.coordX][mur.coordY].estPresent = false;
+                remplacerID(labyrinthe[mur.coordX][mur.coordY-1].idCase,labyrinthe[mur.coordX][mur.coordY].idCase);
             }
+
         }
 
     }
+    private Mur selectionMurHasard(char ch){
+        Random r = new Random();
+        Mur m = new Mur(-1,-1);
 
+        if(ch == 'v'){
+            int choix = r.nextInt(mursVertAVisiter.size());
+            m = mursVertAVisiter.get(choix);
+            mursVertAVisiter.remove(m);
+        }
+        if(ch == 'h'){
+            int choix = r.nextInt(mursHoriAVisiter.size());
+            m = mursHoriAVisiter.get(choix);
+            mursHoriAVisiter.remove(m);
+        }
+        return m;
+    }
     private boolean checkIDCases(Case[][] labyrinthe){
         //méthode qui renvoie true si les ID de toutes les cases sont identiques (ce qui veut dire que toutes les cases
         //ont été fusionnées
@@ -141,12 +154,18 @@ public class Labyrinthe {
         //l'algorithme de modélisation. Permet aussi de remettre le labyrinthe à zéro
         for(int i =0; i < mursVerticaux.length; i++){
             for(int j =0; j < mursVerticaux[0].length; j++){
-                mursVerticaux[i][j] = true;
+                mursVerticaux[i][j] = new Mur(i,j);
+                if(i!=0 && i!= mursVerticaux.length-1) {
+                    mursVertAVisiter.add(mursVerticaux[i][j]);
+                }
             }
         }
         for(int i =0; i < mursHorizontaux.length; i++){
             for(int j =0; j < mursHorizontaux[0].length; j++){
-                mursHorizontaux[i][j] = true;
+                mursHorizontaux[i][j] = new Mur(i,j);
+                if(j!= 0 && j!= mursHorizontaux[0].length -1 ) {
+                    mursHoriAVisiter.add(mursHorizontaux[i][j]);
+                }
             }
         }
     }
