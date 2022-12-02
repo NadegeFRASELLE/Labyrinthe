@@ -10,12 +10,15 @@ public class Labyrinthe {
     //on va stocker l'emplacement de l'entrée et de la sortie
     ArrayList<Mur> mursVertAVisiter = new ArrayList<>();
     ArrayList<Mur> mursHoriAVisiter = new ArrayList<>();
+    //listes qui contiennent les murs horizontaux et verticaux qu'on a encore à visiter
     Case[][] labyrinthe = new Case[longueur][hauteur];
     Mur[][] mursVerticaux = new Mur[longueur + 1][hauteur];
     Mur[][] mursHorizontaux = new Mur[longueur][hauteur + 1];
     //On a un tableau pour stocker les cases, une "matrice" de murs verticaux et une "matrice" de murs horizontaux
 
     public Labyrinthe() {
+        //constructeur du labyrinthe qui met en place les cases, les murs, les coordonnées de l'entrée et de la sortie,
+        // et ensuite, tant qu'il y a des cases qui ont des id différents
         setupCases();
         setupMurs();
         entree.idCase = 0;
@@ -30,7 +33,7 @@ public class Labyrinthe {
         while(!checkIDCases(labyrinthe)){
             selectionCase();
         }
-        //écrire l'algo de résolution du labyrinthe puis en faire une méthode
+
 
     }
     /*private void setupEntreeSortie(Case eS){
@@ -86,13 +89,17 @@ public class Labyrinthe {
 
         if(choix == 1){
             mur = selectionMurHasard('v');
+            //on utilise la méthode pour sélectionner des murs au hasard à partir de listes des murs restants
             if(labyrinthe[mur.coordX][mur.coordY].idCase != labyrinthe[mur.coordX-1][mur.coordY].idCase){
+                //si les coordonnées des cases des deux cotés du mur sélectionné ne sont pas les memes, on supprime le
+                //mur et on fusionne les cases grace a la methode remplacerID
                 mursVerticaux[mur.coordX][mur.coordY].estPresent = false;
                 remplacerID(labyrinthe[mur.coordX-1][mur.coordY].idCase,labyrinthe[mur.coordX][mur.coordY].idCase);
             }
         }
         if(choix == 2){
             mur = selectionMurHasard('h');
+            //idem mais avec les murs horizontaux
             if(labyrinthe[mur.coordX][mur.coordY].idCase != labyrinthe[mur.coordX][mur.coordY-1].idCase){
                 mursHorizontaux[mur.coordX][mur.coordY].estPresent = false;
                 remplacerID(labyrinthe[mur.coordX][mur.coordY-1].idCase,labyrinthe[mur.coordX][mur.coordY].idCase);
@@ -102,20 +109,25 @@ public class Labyrinthe {
 
     }
     private Mur selectionMurHasard(char ch){
+        //on va sélectionner un mur au hasard mais en prenant en entrée un char qui va permettre de savoir dans quelle
+        // liste de murs on va le choisir
         Random r = new Random();
         Mur m = new Mur(-1,-1);
 
-        if(ch == 'v'){
+        if(ch == 'v' && !mursVertAVisiter.isEmpty()){
+            //on choisit un mur au hasard dans la liste des murs verticaux (si elle n'est pas vide), on le sauvegarde
+            //dans la variable temporaire puis on retire ce mur de la liste
             int choix = r.nextInt(mursVertAVisiter.size());
             m = mursVertAVisiter.get(choix);
             mursVertAVisiter.remove(m);
         }
-        if(ch == 'h'){
+        if(ch == 'h'&& !mursHoriAVisiter.isEmpty()){
+            // idem mais avec les murs horizontaux
             int choix = r.nextInt(mursHoriAVisiter.size());
             m = mursHoriAVisiter.get(choix);
             mursHoriAVisiter.remove(m);
         }
-        return m;
+        return m; //on retourne le mur trouvé
     }
     private boolean checkIDCases(Case[][] labyrinthe){
         //méthode qui renvoie true si les ID de toutes les cases sont identiques (ce qui veut dire que toutes les cases
@@ -130,6 +142,8 @@ public class Labyrinthe {
         return true;
     }
     private void remplacerID(int idRemplacement, int idEffacer){
+        // on veut fusionner des cases, donc toutes les cases qui ont l ID a effacer verront leur ID remplace par
+        // le nouvel ID
         for(int i = 0; i < labyrinthe.length; i++){
             for(int j=0; j< labyrinthe[0].length; j++){
                 if(labyrinthe[i][j].idCase == idEffacer){
