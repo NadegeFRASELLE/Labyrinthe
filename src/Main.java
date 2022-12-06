@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -15,29 +16,38 @@ public class Main {
         //pour l'affichage
         JFrame mainFrame = new JFrame();
         //JFrame mainFrame = createMainFrame();
-		ImagePanel eastPanel = new ImagePanel(400,400);
+		
 
-		JPanel westPanel = new JPanel();
+		JPanel nordPanel = new JPanel();
+		ImagePanel sudPanel = new ImagePanel(400,400);
+		
+		
 		JButton UN = new JButton("Affichage du labyrinthe");
 		JButton DEUX = new JButton("resolution");
 		JButton TROIS = new JButton("telechargement");
 		
-		
+		//bon la c'est un peu chelou je suis obliger de declarger un objet couleur pour apres devoir le mettre en gris
+		Color color = Color.WHITE; 
+		nordPanel.setBackground(color.DARK_GRAY);
+
 		
 		UN.setBounds(400, 60, 100, 40);
 		DEUX.setBounds(400, 60, 100, 40);
 		TROIS.setBounds(400, 60, 100, 40);
 				
-		eastPanel.add(UN);
-		eastPanel.add(DEUX);
-		eastPanel.add(TROIS);
+		nordPanel.add(UN);
+		nordPanel.add(DEUX);
+		nordPanel.add(TROIS);
 		
-		mainFrame.add(eastPanel, BorderLayout.EAST);
-		mainFrame.add(westPanel, BorderLayout.WEST);
+		
+		mainFrame.add(nordPanel, BorderLayout.NORTH);
+		mainFrame.add(sudPanel, BorderLayout.SOUTH);
 				
 		mainFrame.setSize(800,800); 
 		mainFrame.setVisible(true); 
-		mainFrame.getContentPane().setBackground(Color.CYAN);
+		mainFrame.getContentPane().setBackground(Color.PINK);
+		
+		
 
 		//action du premier bouton
 		UN.addActionListener(e -> {
@@ -45,7 +55,7 @@ public class Main {
 			l = new Labyrinthe();
 			BufferedImage bufferedImage = transformArrayToImage(l);
 			try {
-				eastPanel.setImage(bufferedImage); //on affiche l'image ainsi générée dans le panel est
+				sudPanel.setImage(bufferedImage); //on affiche l'image ainsi générée dans le panel est
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
