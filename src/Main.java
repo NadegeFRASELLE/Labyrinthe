@@ -25,10 +25,8 @@ public class Main {
 		JButton UN = new JButton("Affichage du labyrinthe");
 		JButton DEUX = new JButton("resolution");
 		JButton TROIS = new JButton("telechargement");
-		
-		//bon la c'est un peu chelou je suis obliger de declarger un objet couleur pour apres devoir le mettre en gris
-		Color color = Color.WHITE; 
-		nordPanel.setBackground(color.DARK_GRAY);
+
+		nordPanel.setBackground(Color.DARK_GRAY);
 
 		
 		UN.setBounds(400, 60, 100, 40);
@@ -51,7 +49,7 @@ public class Main {
 
 		//action du premier bouton
 		UN.addActionListener(e -> {
-			//on créé un nouveau labyrhinte et on le converti en BufferedImage
+			//on créé un nouveau labyrinthe et on le converti en BufferedImage
 			l = new Labyrinthe();
 			BufferedImage bufferedImage = transformArrayToImage(l);
 			try {
@@ -77,7 +75,7 @@ public class Main {
 			for (int j = 0; j < labyrinthe.mursHorizontaux[i].length; j++) {
 				Color color = Color.WHITE; //on décide que les murs seront blancs, donc on stocke cette couleur dans une variable Color
 				if (labyrinthe.mursHorizontaux[i][j].estPresent) {
-					for(int k = 0; k<5; k++) { // on traite les murs horizontaux, donc quand on trace un mur il fait 5 pixels de long
+					for(int k = 0; k<6; k++) { // on traite les murs horizontaux, donc quand on trace un mur il fait 5 pixels de long
 						outputImage.setRGB(i*5+k, j*5, color.getRGB());
 					}
 				}
@@ -89,7 +87,7 @@ public class Main {
 			for (int j = 0; j < labyrinthe.mursVerticaux[i].length; j++) {
 				Color color = Color.WHITE;
 				if (labyrinthe.mursVerticaux[i][j].estPresent) {
-					for(int k =0; k<5; k++) { // seulement ici, si on a un mur, il fait 5 pixels de haut (car on traite des murs verticaux)
+					for(int k =0; k<6; k++) { // seulement ici, si on a un mur, il fait 5 pixels de haut (car on traite des murs verticaux)
 						outputImage.setRGB(i*5, j*5+k, color.getRGB());
 					}
 				}
@@ -97,7 +95,7 @@ public class Main {
 			}
 		}
 
-		return outputImage; // on renvoir l'image ainsi générée
+		return outputImage; // on renvoie l'image ainsi générée
 	}
 
 }
