@@ -85,14 +85,9 @@ public class Main {
         });
 
         TROIS.addActionListener(e -> {
-           
-            //BufferedImage solutionAvecMurs = transformArrayToImage(solution, l);
-
-
             try {
-            	//BufferedImage solutionAvecMurs = getMyImage();
                 File outputfile = new File("solution.png");
-                ImageIO.write(solutionAvecMurs, "png", outputfile);
+                ImageIO.write(solution, "png", outputfile);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
