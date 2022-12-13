@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
+import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -33,16 +34,19 @@ public class Main {
         JButton DEUX = new JButton("Resolution");
         JButton TROIS = new JButton("Telechargement");
 
-        nordPanel.setBackground(Color.DARK_GRAY);
-
-
+        String[] text = Stream.of("Niveau 1", "Niveau 2", "Niveau 3").toArray(String[]::new);
+        JComboBox<String> comboBox = new JComboBox<String>(text);
+        
         UN.setBounds(400, 60, 100, 40);
         DEUX.setBounds(400, 60, 100, 40);
         TROIS.setBounds(400, 60, 100, 40);
 
+        nordPanel.setBackground(Color.DARK_GRAY);
+        nordPanel.add(comboBox);
         nordPanel.add(UN);
         nordPanel.add(DEUX);
         nordPanel.add(TROIS);
+        
 
         principal.setLayout(new BorderLayout(20,15));
         principal.setBackground(Color.PINK);
@@ -56,6 +60,8 @@ public class Main {
         mainFrame.setVisible(true);
         mainFrame.getContentPane().setBackground(Color.PINK);
 
+ 
+        
         mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -178,21 +184,21 @@ public class Main {
     }
 
     private static void tracerTraitEst(int x, int y, BufferedImage image) {
-        Color color = new Color(51, 51, 153);
+        Color color = new Color(0, 160, 223);//51 51 153
         for (int j = ratio/2; j < ratio+1; j++) {
             image.setRGB(x * ratio + j, y * ratio + (ratio/2), color.getRGB());
         }
     }
 
     private static void tracerTraitOuest(int x, int y, BufferedImage image) {
-        Color color = new Color(51, 51, 153);
+        Color color = new Color(0, 160, 223);
         for (int j = 0; j < ratio-(ratio/2)+1; j++) {
             image.setRGB(x * ratio + j, y * ratio + (ratio/2), color.getRGB());
         }
     }
 
     private static void tracerTraitNord(int x, int y, BufferedImage image) {
-        Color color = new Color(51, 51, 153);
+        Color color = new Color(0, 160, 223);
         for (int j = 0; j < ratio-(ratio/2); j++) {
             image.setRGB(x * ratio + (ratio/2), y * ratio + j, color.getRGB());
         }
@@ -200,7 +206,7 @@ public class Main {
 
 
     private static void tracerTraitSud(int x, int y, BufferedImage image) {
-        Color color = new Color(51, 51, 153);
+        Color color = new Color(0, 160, 223);
         for (int j = ratio/2; j < ratio+2; j++) {
             image.setRGB(x * ratio + (ratio/2), y * ratio + j, color.getRGB());
         }
