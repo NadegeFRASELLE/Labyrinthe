@@ -10,6 +10,8 @@ import javax.swing.*;
 public class Main {
     static Labyrinthe l;
     static int ratio = 6;
+    static BufferedImage labyrinthe;
+    static BufferedImage solution;
 
     public static void main(String[] args) throws IOException {
 
@@ -53,10 +55,10 @@ public class Main {
         UN.addActionListener(e -> {
             //on créé un nouveau labyrinthe et on le converti en BufferedImage
             l = new Labyrinthe();
-            BufferedImage inputImage = newBuffredImage();
-            BufferedImage bufferedImage = transformArrayToImage(inputImage, l);
+            labyrinthe = newBuffredImage();
+            transformArrayToImage(labyrinthe, l);
             try {
-                westPanel.setImage(bufferedImage); //on affiche l'image ainsi générée dans le panel est
+                westPanel.setImage(labyrinthe); //on affiche l'image ainsi générée dans le panel est
                 eastPanel.setVisible(false);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -67,13 +69,13 @@ public class Main {
             Stack<Node> c = l.genererCheminSortie();
             BufferedImage inputImage = newBuffredImage();
 
-            BufferedImage solution = colorierSolution(inputImage, c);
-            BufferedImage solutionAvecMurs = transformArrayToImage(solution, l);
+            BufferedImage sol = colorierSolution(inputImage, c);
+            solution = transformArrayToImage(sol, l);
 
 
             try {
                 eastPanel.setVisible(true);
-                eastPanel.setImage(solutionAvecMurs);
+                eastPanel.setImage(solution);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
