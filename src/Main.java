@@ -25,16 +25,15 @@ public class Main {
         JPanel principal = new JPanel();
         JPanel nordPanel = new JPanel();
         ImagePanel westPanel = new ImagePanel(400, 360);
-        westPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         ImagePanel eastPanel = new ImagePanel(400, 360);
-        eastPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+
 
         JButton UN = new JButton("Affichage du labyrinthe");
         JButton DEUX = new JButton("Resolution");
         JButton TROIS = new JButton("Telechargement");
 
         nordPanel.setBackground(Color.DARK_GRAY);
-
+        principal.setBackground(Color.PINK);
 
         UN.setBounds(400, 60, 100, 40);
         DEUX.setBounds(400, 60, 100, 40);
@@ -45,7 +44,6 @@ public class Main {
         nordPanel.add(TROIS);
 
         principal.setLayout(new BorderLayout(20,15));
-        principal.setBackground(Color.PINK);
         principal.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         principal.add(westPanel, BorderLayout.WEST);
         principal.add(eastPanel, BorderLayout.EAST);
