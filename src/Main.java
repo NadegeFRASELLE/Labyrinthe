@@ -1,5 +1,7 @@
 import java.awt.*;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -54,6 +56,13 @@ public class Main {
         mainFrame.setVisible(true);
         mainFrame.getContentPane().setBackground(Color.PINK);
 
+        mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        }
+    );
 
         //action du premier bouton
         UN.addActionListener(e -> {
