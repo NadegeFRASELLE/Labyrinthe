@@ -2,9 +2,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class Main {
@@ -12,7 +14,8 @@ public class Main {
     static int ratio = 6;
 
     public static void main(String[] args) throws IOException {
-
+    	//BufferedImage solutionAvecMurs;
+    	
         //pour l'affichage
         JFrame mainFrame = new JFrame();
         //JFrame mainFrame = createMainFrame();
@@ -79,10 +82,28 @@ public class Main {
             }
         });
 
+        TROIS.addActionListener(e -> {
+           
+            //BufferedImage solutionAvecMurs = transformArrayToImage(solution, l);
+
+
+            try {
+            	//BufferedImage solutionAvecMurs = getMyImage();
+                File outputfile = new File("solution.png");
+                ImageIO.write(solutionAvecMurs, "png", outputfile);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
     }
 
-    private static BufferedImage newBuffredImage() {
+    private static BufferedImage getMyImage(BufferedImage solution) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private static BufferedImage newBuffredImage() {
         return new BufferedImage(l.longueur * ratio + 1,
                 l.hauteur * ratio + 1, BufferedImage.TYPE_INT_RGB);
     }
