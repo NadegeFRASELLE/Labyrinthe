@@ -1,5 +1,4 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -11,27 +10,26 @@ import javax.swing.*;
 
 public class Main {
     static Labyrinthe l;
-    static int ratio = 6;
+    static int ratio = 12;
     static BufferedImage labyrinthe;
     static BufferedImage solution;
 
     public static void main(String[] args) throws IOException {
-    	//BufferedImage solutionAvecMurs;
-    	
+
         //pour l'affichage
         JFrame mainFrame = new JFrame();
         //JFrame mainFrame = createMainFrame();
 
-
+        JPanel principal = new JPanel();
         JPanel nordPanel = new JPanel();
-        ImagePanel westPanel = new ImagePanel(400, 400);
+        ImagePanel westPanel = new ImagePanel(400, 360);
         westPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
-        ImagePanel eastPanel = new ImagePanel(400, 400);
+        ImagePanel eastPanel = new ImagePanel(400, 360);
         eastPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
         JButton UN = new JButton("Affichage du labyrinthe");
-        JButton DEUX = new JButton("Résolution");
-        JButton TROIS = new JButton("Téléchargement");
+        JButton DEUX = new JButton("Resolution");
+        JButton TROIS = new JButton("Telechargement");
 
         nordPanel.setBackground(Color.DARK_GRAY);
 
@@ -44,12 +42,15 @@ public class Main {
         nordPanel.add(DEUX);
         nordPanel.add(TROIS);
 
+        principal.setLayout(new BorderLayout(20,15));
+        principal.setBackground(Color.PINK);
+        principal.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        principal.add(westPanel, BorderLayout.WEST);
+        principal.add(eastPanel, BorderLayout.EAST);
 
+        mainFrame.add(principal);
         mainFrame.add(nordPanel, BorderLayout.NORTH);
-        mainFrame.add(westPanel, BorderLayout.WEST);
-        mainFrame.add(eastPanel, BorderLayout.EAST);
-
-        mainFrame.setSize(1000, 800);
+        mainFrame.setSize(1000,600);
         mainFrame.setVisible(true);
         mainFrame.getContentPane().setBackground(Color.PINK);
 
@@ -59,7 +60,9 @@ public class Main {
             //on créé un nouveau labyrinthe et on le converti en BufferedImage
             l = new Labyrinthe();
             labyrinthe = newBuffredImage();
+            colorierFond(labyrinthe);
             transformArrayToImage(labyrinthe, l);
+
             try {
                 westPanel.setImage(labyrinthe); //on affiche l'image ainsi générée dans le panel est
                 eastPanel.setVisible(false);
@@ -71,7 +74,7 @@ public class Main {
         DEUX.addActionListener(e -> {
             Stack<Node> c = l.genererCheminSortie();
             BufferedImage inputImage = newBuffredImage();
-
+            colorierFond(inputImage);
             BufferedImage sol = colorierSolution(inputImage, c);
             solution = transformArrayToImage(sol, l);
 
@@ -86,6 +89,8 @@ public class Main {
 
         TROIS.addActionListener(e -> {
             try {
+                File out = new File("labyrinthe.png");
+                ImageIO.write(labyrinthe, "png", out);
                 File outputfile = new File("solution.png");
                 ImageIO.write(solution, "png", outputfile);
             } catch (IOException ex) {
@@ -110,10 +115,10 @@ public class Main {
 
         //la BufferedImage fait 5 fois la taille de notre tableau car chaque case fait 5 pixels avec les murs (+ 1 pour
         // fermer le labyrinthe)
-
+        Color color = Color.DARK_GRAY;
         for (int i = 0; i < labyrinthe.mursHorizontaux.length; i++) {
             for (int j = 0; j < labyrinthe.mursHorizontaux[i].length; j++) {
-                Color color = Color.WHITE; //on décide que les murs seront blancs, donc on stocke cette couleur dans une variable Color
+
                 if (labyrinthe.mursHorizontaux[i][j].estPresent) {
                     for (int k = 0; k < ratio+1; k++) { // on traite les murs horizontaux, donc quand on trace un mur il fait 5 pixels de long
                         image.setRGB(i * ratio + k, j * ratio, color.getRGB());
@@ -125,7 +130,6 @@ public class Main {
         for (int i = 0; i < labyrinthe.mursVerticaux.length; i++) {
             //pareil qu'au dessus
             for (int j = 0; j < labyrinthe.mursVerticaux[i].length; j++) {
-                Color color = Color.WHITE;
                 if (labyrinthe.mursVerticaux[i][j].estPresent) {
                     for (int k = 0; k < ratio+1; k++) { // seulement ici, si on a un mur, il fait 5 pixels de haut (car on traite des murs verticaux)
                         image.setRGB(i * ratio, j * ratio + k, color.getRGB());
@@ -147,54 +151,49 @@ public class Main {
             Case c2 = chemin.get(k).getNoeud();
 
             char direction = sensTrait(c1, c2);
-            System.out.println(direction);
             switch (direction) {
-                case 'E' -> tracerTraitEst(c1.coordonneeX, c1.coordonneeY, image);
-                case 'W' -> tracerTraitOuest(c1.coordonneeX, c1.coordonneeY, image);
-                case 'S' -> tracerTraitSud(c1.coordonneeX, c1.coordonneeY, image);
-                default -> tracerTraitNord(c1.coordonneeX, c1.coordonneeY, image);
+                case 'E' -> {tracerTraitEst(c1.coordonneeX, c1.coordonneeY, image);
+                    tracerTraitOuest(c2.coordonneeX, c2.coordonneeY, image);}
+                case 'W' -> { tracerTraitOuest(c1.coordonneeX, c1.coordonneeY, image);
+                tracerTraitEst(c2.coordonneeX, c2.coordonneeY, image); }
+                case 'S' -> {tracerTraitSud(c1.coordonneeX, c1.coordonneeY, image);
+                    tracerTraitNord(c2.coordonneeX, c2.coordonneeY, image);}
+                default -> {tracerTraitNord(c1.coordonneeX, c1.coordonneeY, image);
+                    tracerTraitSud(c2.coordonneeX, c2.coordonneeY, image);}
             }
             Case cFin = chemin.get(chemin.size()-1).getNoeud();
             tracerTraitOuest(cFin.coordonneeX, cFin.coordonneeY, image);
         }
 
-//        for (Node n : chemin) {
-//            Color color = new Color(51, 51, 153);
-//            for (int i = 3; i < 4; i++) {
-//                for (int j = 3; j < 4; j++) {
-//                    image.setRGB(n.getNoeud().coordonneeX * 6 + i, n.getNoeud().coordonneeY * 6 + j, color.getRGB());
-//                }
-//            }
-//        }
         return image;
     }
 
     private static void tracerTraitEst(int x, int y, BufferedImage image) {
         Color color = new Color(51, 51, 153);
-        for (int j = 3; j < ratio+1; j++) {
-            image.setRGB(x * ratio + j, y * ratio + 3, color.getRGB());
+        for (int j = ratio/2; j < ratio+1; j++) {
+            image.setRGB(x * ratio + j, y * ratio + (ratio/2), color.getRGB());
         }
     }
 
     private static void tracerTraitOuest(int x, int y, BufferedImage image) {
         Color color = new Color(51, 51, 153);
-        for (int j = 0; j < ratio-2; j++) {
-            image.setRGB(x * ratio + j, y * ratio + 3, color.getRGB());
+        for (int j = 0; j < ratio-(ratio/2)+1; j++) {
+            image.setRGB(x * ratio + j, y * ratio + (ratio/2), color.getRGB());
         }
     }
 
     private static void tracerTraitNord(int x, int y, BufferedImage image) {
         Color color = new Color(51, 51, 153);
-        for (int j = 0; j < ratio-2; j++) {
-            image.setRGB(x * ratio + 3, y * ratio + j, color.getRGB());
+        for (int j = 0; j < ratio-(ratio/2); j++) {
+            image.setRGB(x * ratio + (ratio/2), y * ratio + j, color.getRGB());
         }
     }
 
 
     private static void tracerTraitSud(int x, int y, BufferedImage image) {
         Color color = new Color(51, 51, 153);
-        for (int j = 3; j < ratio+1; j++) {
-            image.setRGB(x * ratio + 3, y * ratio + j, color.getRGB());
+        for (int j = ratio/2; j < ratio+2; j++) {
+            image.setRGB(x * ratio + (ratio/2), y * ratio + j, color.getRGB());
         }
     }
 
@@ -209,6 +208,13 @@ public class Main {
             return 'S';
         }
         return 'N';
+    }
+    private static void colorierFond(BufferedImage image){
+
+        Graphics2D graphics = image.createGraphics();
+
+        graphics.setPaint (Color.PINK);
+        graphics.fillRect ( 0, 0, image.getWidth(), image.getHeight() );
     }
 
 }
