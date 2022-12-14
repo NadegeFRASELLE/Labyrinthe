@@ -41,14 +41,12 @@ public class Labyrinthe {
             selectionCase();
         }
     }
-
     public Tree genererArbreLabyrinthe() {
         //creation d'un arbre où sera stockée la solution
         Tree arbreLabyrinthe = new Tree(entree);
         arbreLabyrinthe.getRoot().addChildren(this);
         return arbreLabyrinthe;
     }
-
     public Stack<Node> genererCheminSortie() {
         Tree t = genererArbreLabyrinthe();
         Node n = t.getRoot().trouverSortie(sortie);
@@ -60,7 +58,6 @@ public class Labyrinthe {
         }
         return chemin;
     }
-
     /*private void setupEntreeSortie(Case eS){
         //on veut mettre en place une entree ou une sortie
         //a modifier pour écraser les coordonnées de l'entrée et de la sortie
