@@ -4,8 +4,8 @@ import java.util.Stack;
 
 
 public class Labyrinthe {
-    final int longueur = 5;
-    final int hauteur = 4;
+    int longueur;
+    int hauteur;
     //Pour le moment on va travailler avec un tableau de 5 par 4 cases
     Case entree = new Case();
     Case sortie = new Case();
@@ -13,14 +13,19 @@ public class Labyrinthe {
     ArrayList<Mur> mursVertAVisiter = new ArrayList<>();
     ArrayList<Mur> mursHoriAVisiter = new ArrayList<>();
     //listes qui contiennent les murs horizontaux et verticaux qu'on a encore à visiter
-    Case[][] labyrinthe = new Case[longueur][hauteur];
-    Mur[][] mursVerticaux = new Mur[longueur + 1][hauteur];
-    Mur[][] mursHorizontaux = new Mur[longueur][hauteur + 1];
+    Case[][] labyrinthe;
+    Mur[][] mursVerticaux;
+    Mur[][] mursHorizontaux;
     //On a un tableau pour stocker les cases, une "matrice" de murs verticaux et une "matrice" de murs horizontaux
 
-    public Labyrinthe() {
-        //constructeur du labyrinthe qui met en place les cases, les murs, les coordonnées de l'entrée et de la sortie,
-        // et ensuite, tant qu'il y a des cases qui ont des id différents
+    public Labyrinthe(int longueur, int hauteur){
+        this.longueur = longueur;
+        this.hauteur = hauteur;
+
+        labyrinthe = new Case[longueur][hauteur];
+        mursVerticaux = new Mur[longueur + 1][hauteur];
+        mursHorizontaux = new Mur[longueur][hauteur + 1];
+
         setupCases();
         setupMurs();
         entree.idCase = 0;
@@ -35,8 +40,6 @@ public class Labyrinthe {
         while (!checkIDCases(labyrinthe)) {
             selectionCase();
         }
-
-
     }
 
     public Tree genererArbreLabyrinthe() {

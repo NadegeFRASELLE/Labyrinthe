@@ -25,28 +25,27 @@ public class Main {
 
         JPanel principal = new JPanel();
         JPanel nordPanel = new JPanel();
-        ImagePanel westPanel = new ImagePanel(400, 360);
-        ImagePanel eastPanel = new ImagePanel(400, 360);
+        ImagePanel westPanel = new ImagePanel(400, 400);
+        ImagePanel eastPanel = new ImagePanel(400, 400);
+        String[] text = Stream.of("Facile", "Moyen", "Difficile").toArray(String[]::new);
+        JComboBox<String> difficulte = new JComboBox<>(text);
 
-
-        JButton UN = new JButton("Affichage du labyrinthe");
-        JButton DEUX = new JButton("Resolution");
-        JButton TROIS = new JButton("Telechargement");
+        JButton afficher = new JButton("Affichage du labyrinthe");
+        JButton resoudre = new JButton("Resolution");
+        JButton telecharger = new JButton("Telechargement");
 
  		nordPanel.setBackground(Color.DARK_GRAY);
 		principal.setBackground(Color.PINK);	
-        String[] text = Stream.of("Niveau 1", "Niveau 2", "Niveau 3").toArray(String[]::new);
-        JComboBox<String> comboBox = new JComboBox<String>(text);
-        
-        UN.setBounds(400, 60, 100, 40);
-        DEUX.setBounds(400, 60, 100, 40);
-        TROIS.setBounds(400, 60, 100, 40);
+
+        afficher.setBounds(400, 60, 100, 40);
+        resoudre.setBounds(400, 60, 100, 40);
+        telecharger.setBounds(400, 60, 100, 40);
 
         nordPanel.setBackground(Color.DARK_GRAY);
-        nordPanel.add(comboBox);
-        nordPanel.add(UN);
-        nordPanel.add(DEUX);
-        nordPanel.add(TROIS);
+        nordPanel.add(difficulte);
+        nordPanel.add(afficher);
+        nordPanel.add(resoudre);
+        nordPanel.add(telecharger);
         
 
         principal.setLayout(new BorderLayout(20,15));
@@ -71,9 +70,17 @@ public class Main {
     );
 
         //action du premier bouton
-        UN.addActionListener(e -> {
+        afficher.addActionListener(e -> {
             //on créé un nouveau labyrinthe et on le converti en BufferedImage
-            l = new Labyrinthe();
+            if(difficulte.getSelectedItem() == "Facile") {
+                l = new Labyrinthe(5,5);
+            }
+            if(difficulte.getSelectedItem() == "Moyen") {
+                l = new Labyrinthe(7,7);
+            }
+            if(difficulte.getSelectedItem() == "Difficile") {
+                l = new Labyrinthe(9,9);
+            }
             labyrinthe = newBuffredImage();
             colorierFond(labyrinthe);
             transformArrayToImage(labyrinthe, l);
@@ -86,7 +93,7 @@ public class Main {
             }
 
         });
-        DEUX.addActionListener(e -> {
+        resoudre.addActionListener(e -> {
             Stack<Node> c = l.genererCheminSortie();
             BufferedImage inputImage = newBuffredImage();
             colorierFond(inputImage);
@@ -102,7 +109,7 @@ public class Main {
             }
         });
 
-        TROIS.addActionListener(e -> {
+        telecharger.addActionListener(e -> {
             try {
                 File out = new File("labyrinthe.png");
                 ImageIO.write(labyrinthe, "png", out);
