@@ -12,10 +12,10 @@ public class Node {
         children = new ArrayList<>();
     }
 
+    //getters
     public Case getNoeud() {
         return noeud;
     }
-
     public Node getParent() {
         return parent;
     }
@@ -84,14 +84,15 @@ public class Node {
     }
 
     public Node trouverSortie(Case sortie) {
+
         if (compareNodeCase(this, sortie)) {
             return this;
         }
-
+        // pour chaque element de la liste, on vérifie si le Node contient la sortie ou pas
         for (Node n : children) {
             Node resultat =  n.trouverSortie(sortie);
             if (compareNodeCase(resultat, sortie)) {
-                return resultat;
+                return resultat; // on retourne le node qui contient la sortie quand on le trouve
             }
         }
 

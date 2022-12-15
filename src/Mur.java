@@ -1,5 +1,7 @@
 public class Mur {
     boolean estPresent = true;
+
+    //les coordonnées du mur dans le tableau
     int coordX;
     int coordY;
 

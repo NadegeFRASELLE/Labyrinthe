@@ -15,7 +15,7 @@ public class Main {
     static BufferedImage labyrinthe;
     static BufferedImage solution;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         //creation des différents éléments de l'affichage
         JFrame mainFrame = new JFrame();
@@ -26,7 +26,7 @@ public class Main {
         String[] text = Stream.of("Facile", "Moyen", "Difficile").toArray(String[]::new);
         JComboBox<String> difficulte = new JComboBox<>(text);
 
-        JButton afficher = new JButton("Affichage du labyrinthe");
+        JButton generer = new JButton("Generer");
         JButton resoudre = new JButton("Resolution");
         JButton telecharger = new JButton("Telechargement");
 
@@ -36,12 +36,12 @@ public class Main {
         principal.setBackground(Color.PINK);
 
         // dimensions des boutons et ajout des differents elements sur le panel principal puis sur la mainframe
-        afficher.setBounds(400, 60, 100, 40);
+        generer.setBounds(400, 60, 100, 40);
         resoudre.setBounds(400, 60, 100, 40);
         telecharger.setBounds(400, 60, 100, 40);
 
         nordPanel.add(difficulte);
-        nordPanel.add(afficher);
+        nordPanel.add(generer);
         nordPanel.add(resoudre);
         nordPanel.add(telecharger);
 
@@ -68,7 +68,7 @@ public class Main {
         //ajout pour que le programme cesse de s'executer quand on ferme la fenetre avec la croix
 
         //ajout des differentes actions des boutons
-        afficher.addActionListener(e -> {
+        generer.addActionListener(e -> {
             //on créé un nouveau labyrinthe en prenant en compte le mode de difficulte donné par la combobox
             if (difficulte.getSelectedItem() == "Facile") {
                 l = new Labyrinthe(5, 5);
