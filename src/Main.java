@@ -1,5 +1,6 @@
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
-
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -7,9 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
 import java.util.stream.Stream;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
 
 public class Main {
     static Labyrinthe l;
@@ -71,7 +69,7 @@ public class Main {
 
         //ajout des differentes actions des boutons
         afficher.addActionListener(e -> {
-            //on créé un nouveau labyrinthe et on le converti en BufferedImage
+            //on créé un nouveau labyrinthe en prenant en compte le mode de difficulte donné par la combobox
             if (difficulte.getSelectedItem() == "Facile") {
                 l = new Labyrinthe(5, 5);
             }
@@ -81,20 +79,28 @@ public class Main {
             if (difficulte.getSelectedItem() == "Difficile") {
                 l = new Labyrinthe(9, 9);
             }
+            // ensuite on créé une nouvelle BufferedImage à la bonne taille, la colore de la même couleur que le fond
+            //de la mainframe
             labyrinthe = DessinerLabyrinthe.newBuffredImage(l, ratio);
             DessinerLabyrinthe.colorierFond(labyrinthe);
+            //on dessine le labyrinthe qu'on vient de générer sur la buffered image
             DessinerLabyrinthe.transformArrayToImage(labyrinthe, l, ratio);
 
             try {
-                westPanel.setImage(labyrinthe); //on affiche l'image ainsi générée dans le panel est
+                //on affiche notre image ainsi générée et on cache le panel à droite s'il y avait quelque chose dessus
+                // pour éviter d'avoir la solution d'un autre labyrinthe à côté
+                westPanel.setImage(labyrinthe);
                 eastPanel.setVisible(false);
+
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
 
         });
         resoudre.addActionListener(e -> {
+            //on stocke le chemin pour sortir du labyrinthe sous la forme d'une pile de cases pour l'afficher
             Stack<Node> c = l.genererCheminSortie();
+            //même procédé de création d'image qu'au dessus sauf qu'on dessine la solution avant de redessiner le labyrinthe
             BufferedImage inputImage = DessinerLabyrinthe.newBuffredImage(l, ratio);
             DessinerLabyrinthe.colorierFond(inputImage);
             BufferedImage sol = DessinerLabyrinthe.colorierSolution(inputImage, c, ratio);
@@ -102,6 +108,7 @@ public class Main {
 
 
             try {
+                //si on clique sur ce bouton, on rend le panel à droite visible à nouveau et on affiche la solution dedans
                 eastPanel.setVisible(true);
                 eastPanel.setImage(solution);
             } catch (IOException ex) {
@@ -110,6 +117,8 @@ public class Main {
         });
         telecharger.addActionListener(e -> {
             try {
+                //on créé deux fichiers pour pouvoir télécharger notre labyrinthe ainsi que le labyrinthe résolu
+
                 File out = new File("labyrinthe.png");
                 ImageIO.write(labyrinthe, "png", out);
                 File outputfile = new File("solution.png");
