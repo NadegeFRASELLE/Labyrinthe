@@ -86,7 +86,8 @@ public class Labyrinthe {
         Mur mur;
         int choix = r.nextInt(1, 3);
 
-        //choix d'un tableaux de murs au hasard puis ensuite choix des coordonnées du mur au hasard (bords exclus)
+        //choix d'un tableaux de murs au hasard (murs horitaux ou verticaux)
+        //puis ensuite choix des coordonnées du mur au hasard (bords exclus)
 
         if (choix == 1) {
             mur = selectionMurHasard('v');

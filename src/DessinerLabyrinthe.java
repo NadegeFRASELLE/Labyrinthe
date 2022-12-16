@@ -83,7 +83,7 @@ public class DessinerLabyrinthe {
                     tracerTraitSud(c1.coordonneeX, c1.coordonneeY, image, ratio);
                     tracerTraitNord(c2.coordonneeX, c2.coordonneeY, image, ratio);
                 }
-                default -> {
+                case NORD -> {
                     tracerTraitNord(c1.coordonneeX, c1.coordonneeY, image, ratio);
                     tracerTraitSud(c2.coordonneeX, c2.coordonneeY, image, ratio);
                 }

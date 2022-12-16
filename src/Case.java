@@ -1,6 +1,6 @@
 public class Case {
     //L'identifiant de la case + ses coordonnées pour pouvoir gérer les murs ensuite
-    int idCase;
+    int idCase; //Sert lors de la gération du labyrinthe (algorithme de fusion aléatoire de chemin)
     int coordonneeX;
     int coordonneeY;
 
